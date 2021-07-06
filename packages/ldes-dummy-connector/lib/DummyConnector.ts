@@ -17,7 +17,7 @@ export class DummyConnector implements IWritableConnector {
   }
 
   /**
-   * Initializes the backend system by creating tables, counters and/or enabling plugins
+   * Initializes the backend system by creating tables, counters and/or enabling plugins.
    */
   public async provision(): Promise<void> {
     // Nothing to provision here
