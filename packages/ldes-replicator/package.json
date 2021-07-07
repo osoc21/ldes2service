@@ -29,9 +29,10 @@
     "@ldes/types": "^0.0.0"
   },
   "dependencies": {
-    "@treecg/actor-init-ldes-client": "^2.3.2",
+    "@comunica/core": "~1.19.2",
     "@ldes/ldes-dummy-connector": "^0.0.0",
     "@ldes/ldes-dummy-state": "^0.0.0",
-    "@comunica/core": "~1.19.2"
+    "@treecg/actor-init-ldes-client": "^2.3.2",
+    "dotenv": "^10.0.0"
   }
 }
