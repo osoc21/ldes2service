@@ -1,0 +1,26 @@
+{
+  "name": "ldes-central-server",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Wout.Verbiest <wout.verbiest@student.howest.be>",
+  "homepage": "https://github.com/osoc21/ldes2service#readme",
+  "license": "ISC",
+  "main": "lib/ldes-central-server.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osoc21/ldes2service.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/osoc21/ldes2service/issues"
+  }
+}
