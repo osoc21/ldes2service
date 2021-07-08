@@ -6,8 +6,6 @@
       <label for="ldes-uri">LDES URI</label>
       <input type="text" id="ldes-uri" :value="msg" placeholder="https://example.org/ldes" />
       <br />
-      <label for="polling-interval">Polling interval (ms)</label> 
-      <input type="number" id="polling-interval" value="5000" />
 
       <fieldset>
         <legend>Integrations</legend>
@@ -20,7 +18,21 @@
         <input type="checkbox" id="postgres" name="postgres" />
         <label for="postgres">Postgres</label>
       </fieldset>
-      <input type="submit" value="start replicating">
+      <input type="submit" value="start replicating" />
+
+      <button type="button" v-on:click="isHidden = !isHidden">Advanced Settings</button>
+
+      <br />
+
+      <fieldset v-show="isHidden">
+        <!-- <legend>Advanced Settings</legend> -->
+
+        <label for="polling-interval">Polling interval (ms)</label>
+        <input type="number" id="polling-interval" value="5000" />
+        <br />
+        <label for="amount-of-versions">Number of versions to keep</label>
+        <input type="number" id="amount-of-versions" value="1" />
+      </fieldset>
     </form>
   </div>
 </template>
@@ -31,6 +43,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class ControlPanel extends Vue {
   @Prop() private msg!: string;
+  @Prop() private isHidden: boolean = false;
 }
 </script>
 
@@ -47,7 +60,7 @@ input[type='checkbox'] {
   margin-right: 10px;
 }
 
-input[type='submit']{
+input[type='submit'] {
   margin-top: 10px;
   padding: 5px;
 }
