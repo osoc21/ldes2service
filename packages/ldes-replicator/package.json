@@ -20,7 +20,8 @@
     "url": "git+https://github.com/Informatievlaanderen/ldes2service.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "start": "node -r dotenv/config ./bin/ldes-replicator.js"
   },
   "bugs": {
     "url": "https://github.com/Informatievlaanderen/ldes2service/issues"

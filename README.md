@@ -13,6 +13,7 @@ A Linked Data Event Stream (LDES) is a collection of immutable objects. The HTTP
 ```bash
 npm install
 npm run build
+cd packages/ldes-replicator && npm run start
 node packages/ldes-replicator/bin/ldes-replicator.js
 ```
 
