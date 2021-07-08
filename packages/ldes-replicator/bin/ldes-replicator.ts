@@ -11,8 +11,8 @@ import { Orchestrator } from '../lib/Orchestrator';
 
 // TODO: Parse and use CLI parameters
 
-const URL = process.env.URL || 'https://apidg.gent.be/opendata/adlib2eventstream/v1/dmg/objecten';
-const POLL_INTERVAL = Number.parseInt(process.env.pollingInterval || '5000', 10);
+const URL = process.env.URL;
+const POLL_INTERVAL = Number.parseInt(process.env.pollingInterval ?? '5000', 10);
 
 async function run(): Promise<void> {
   const connector = new DummyConnector();
@@ -21,6 +21,11 @@ async function run(): Promise<void> {
   const options = {
     pollingInterval: POLL_INTERVAL,
   };
+
+  if (!URL) {
+    throw new Error('No LDES URL specified. Have you added the URL environment variable?');
+  }
+
   const LDESClient = newEngine();
   const eventstreamSync = LDESClient.createReadStream(URL, options);
 
