@@ -16,7 +16,7 @@
     "test:integration:docker": "docker-compose -f docker-compose.test.yml up -d && npm run test:integration && docker-compose -f docker-compose.test.yml down",
     "eslint": "eslint --ext ts",
     "eslint:cache": "npm run eslint -- --cache",
-    "prettier": "prettier --check \"./**/*.{ts,json,md,yml}\"",
+    "prettier": "prettier --check \"./**/*.{ts,json,md,yml,html}\"",
     "lint": "npm run eslint && npm run prettier",
     "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
     "clean": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules",

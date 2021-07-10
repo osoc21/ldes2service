@@ -2,6 +2,10 @@
   <div class="hello">
     <h1>LDES 2 Service Control Panel</h1>
 
+    <vl-infoblock mod-type="contact" title="Infoblock contact">
+      Variant of infoblock with contact-icon
+    </vl-infoblock>
+
     <form>
       <label for="ldes-uri">LDES URI</label>
       <input type="text" id="ldes-uri" :value="msg" placeholder="https://example.org/ldes" />
@@ -74,6 +78,5 @@ input {
   display: block;
   max-width: 800px;
   margin: 20px auto;
-  text-align: left;
 }
 </style>

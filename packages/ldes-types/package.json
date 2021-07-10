@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "> TODO: description",
   "homepage": "https://github.com/Informatievlaanderen/ldes2service#readme",
-  "license": "ISC",
+  "license": "MIT",
   "main": "lib/ldes-types.js",
   "directories": {
     "lib": "lib",

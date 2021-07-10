@@ -4,7 +4,7 @@
   "description": "> TODO: description",
   "author": "Wout.Verbiest <wout.verbiest@student.howest.be>",
   "homepage": "https://github.com/osoc21/ldes2service#readme",
-  "license": "ISC",
+  "license": "MIT",
   "main": "lib/ldes-mongodb-connector.js",
   "directories": {
     "lib": "lib",

@@ -1,18 +1,10 @@
 {
   "name": "ldes-control-panel",
+  "private": "true",
   "version": "0.0.0",
   "description": "> TODO: description",
-  "author": "Wout.Verbiest <wout.verbiest@student.howest.be>",
   "homepage": "https://github.com/osoc21/ldes2service#readme",
-  "license": "ISC",
-  "main": "lib/ldes-control-panel.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/osoc21/ldes2service.git"
@@ -26,25 +18,30 @@
     "url": "https://github.com/osoc21/ldes2service/issues"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
-    "vue": "^2.6.11",
-    "vue-class-component": "^7.2.3",
+    "@govflanders/vl-ui-core": "4.1.29",
+    "@govflanders/vl-ui-util": "3.12.29",
+    "@govflanders/vl-ui-vue-components": "4.1.29",
+    "@govflanders/vl-ui-infoblock": "^3.12.29",
+    "core-js": "^3.15.2",
+    "vue": "^2.6.14",
+    "vue-class-component": "^7.2.6",
+    "vue-i18n": "^8.24.5",
     "vue-property-decorator": "^9.1.2",
-    "vue-router": "^3.2.0",
-    "vuex": "^3.4.0"
+    "vue-router": "^3.5.2",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.19",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
-    "@vue/cli-plugin-unit-jest": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/test-utils": "^1.0.3",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
-    "typescript": "~4.1.5",
-    "vue-template-compiler": "^2.6.11"
+    "@types/jest": "^26.0.24",
+    "@vue/cli-plugin-babel": "~4.5.13",
+    "@vue/cli-plugin-router": "~4.5.13",
+    "@vue/cli-plugin-typescript": "~4.5.13",
+    "@vue/cli-plugin-unit-jest": "~4.5.13",
+    "@vue/cli-plugin-vuex": "~4.5.13",
+    "@vue/cli-service": "~4.5.13",
+    "@vue/test-utils": "^1.2.1",
+    "node-sass": "^6.0.1",
+    "sass-loader": "^10.2.0",
+    "typescript": "~4.3.5",
+    "vue-template-compiler": "^2.6.14"
   }
 }

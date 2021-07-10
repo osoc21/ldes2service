@@ -1,10 +1,13 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <style lang="scss">
+@import '~@govflanders/vl-ui-core/src/scss/core';
+@import '~@govflanders/vl-ui-infoblock/src/scss/infoblock';
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
