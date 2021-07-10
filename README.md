@@ -11,6 +11,9 @@ A Linked Data Event Stream (LDES) is a collection of immutable objects. The HTTP
 ## Installation
 
 ```bash
+# Contact Dwight Van Lancker (dwight.vanlancker@kb.vlaanderen.be) for credentials
+npm login --scope=@govflanders
+
 npm install
 npm run build
 cd packages/ldes-replicator && npm run start
