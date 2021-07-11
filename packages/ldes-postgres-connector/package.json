@@ -1,13 +1,13 @@
 {
-  "name": "@ldes/replicator",
+  "name": "@ldes/ldes-postgres-connector",
   "version": "0.0.0",
   "description": "> TODO: description",
   "homepage": "https://github.com/Informatievlaanderen/ldes2service#readme",
   "license": "ISC",
-  "main": "lib/ldes-replicator.js",
+  "main": "index.js",
+  "typings": "index",
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "lib": "lib"
   },
   "files": [
     "lib/**/*.d.ts",
@@ -20,8 +20,7 @@
     "url": "git+https://github.com/Informatievlaanderen/ldes2service.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
-    "start": "node -r dotenv/config ./bin/ldes-replicator.js"
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
     "url": "https://github.com/Informatievlaanderen/ldes2service/issues"
@@ -30,11 +29,8 @@
     "@ldes/types": "^0.0.0"
   },
   "dependencies": {
-    "@comunica/core": "~1.19.2",
-    "@ldes/ldes-dummy-connector": "^0.0.0",
-    "@ldes/ldes-postgres-connector": "^0.0.0",
-    "@ldes/ldes-dummy-state": "^0.0.0",
-    "@treecg/actor-init-ldes-client": "^2.3.2",
-    "dotenv": "^10.0.0"
+    "@ldes/types": "^0.0.0",
+    "@types/pg": "^8.6.0",
+    "pg": "^8.6.0"
   }
 }

@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  backend:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: 'ldes'
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  #redis:
+
+  replicator:
+    build: .
+    command: sh
+    tty: true
+    stdin_open: true
+    environment:
+      POSTGRES_NAME: 'ldes'
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: 'backend'
+    volumes:
+      - './packages:/app/packages'
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

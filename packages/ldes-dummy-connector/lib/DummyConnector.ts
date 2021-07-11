@@ -22,4 +22,11 @@ export class DummyConnector implements IWritableConnector {
   public async provision(): Promise<void> {
     // Nothing to provision here
   }
+
+  /**
+   * Stops asynchronous operations
+   */
+  public async stop(): Promise<void> {
+    //
+  }
 }

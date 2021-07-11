@@ -9,4 +9,9 @@ export interface IWritableConnector {
    * Initializes the backend system by creating tables, counters and/or enabling plugins
    */
   provision: () => Promise<void>;
+
+  /**
+   * Stops asynchronous operations
+   */
+  stop: () => Promise<void>;
 }

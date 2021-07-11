@@ -20,9 +20,7 @@ export class Orchestrator {
    */
   public async run(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.ldes
-        .on('readable', () => this.processData())
-        .on('error', error => reject(error));
+      this.ldes.on('readable', () => this.processData()).on('error', error => reject(error));
 
       this.ldes.on('end', () => resolve());
     });
@@ -32,7 +30,7 @@ export class Orchestrator {
     const state = this.stateStore.provision();
     const connectors = Promise.all(this.connectors.map(con => con.provision()));
 
-    await Promise.all([ state, connectors ]);
+    await Promise.all([state, connectors]);
   }
 
   /**

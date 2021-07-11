@@ -1,0 +1,13 @@
+mongo:
+  image: mongo:4
+  ports:
+    - 27017:27017
+
+postgres:
+  image: postgres:13
+  environment:
+    POSTGRES_DB: ${POSTGRES_DB}
+    POSTGRES_USER: ${POSTGRES_USER}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  ports:
+    - '${POSTGRES_PORT}:5432'
