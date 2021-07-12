@@ -1,0 +1,33 @@
+{
+  "name": "docker-compose-generator",
+  "version": "0.0.1",
+  "description": "A service to create docker-compose file",
+  "keywords": [
+    "docker"
+  ],
+  "author": "Clément <vandendaelenclement@gmail.com>",
+  "homepage": "https://github.com/osoc21/ldes2service#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osoc21/ldes2service.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/osoc21/ldes2service/issues"
+  },
+  "dependencies": {
+    "docker-composer": "^4.0.1",
+    "fastify": "^3.18.1"
+  }
+}
