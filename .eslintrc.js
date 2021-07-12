@@ -30,22 +30,20 @@ module.exports = {
     Request: false,
     XMLHttpRequest: false,
   },
-  rules: {
-    // Default
-    'array-bracket-spacing': 'off',
-    'class-methods-use-this': 'off', // Conflicts with functions from interfaces that sometimes don't require `this`
-    'comma-dangle': ['error', 'always-multiline'],
-    'dot-location': ['error', 'property'],
-    'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
-    'no-underscore-dangle': 'off', // Conflicts with external libraries
-    'padding-line-between-statements': 'off',
-    'no-param-reassign': 'off',
-    'func-style': 'off',
-    'new-cap': 'off',
-    'no-console': 'off',
-    'lines-around-comment': [
-      'error',
-      {
+    rules: {
+      // Default
+      'array-bracket-spacing': 'off',
+      'class-methods-use-this': 'off', // Conflicts with functions from interfaces that sometimes don't require `this`
+      'comma-dangle': 'off',
+      'dot-location': ['error', 'property'],
+      'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
+      'no-underscore-dangle': 'off', // Conflicts with external libraries
+      'padding-line-between-statements': 'off',
+      'no-param-reassign': 'off',
+      'func-style': 'off',
+      'new-cap': 'off',
+      'no-console': 'off',
+      'lines-around-comment': ['error', {
         beforeBlockComment: false,
         afterBlockComment: false,
         beforeLineComment: false,
@@ -62,50 +60,47 @@ module.exports = {
       {
         code: 120,
         ignoreTemplateLiterals: true,
-      },
-    ],
-    'unicorn/consistent-function-scoping': 'off',
-    'no-warning-comments': 'off',
-    'no-mixed-operators': 'off',
-    'prefer-destructuring': 'off',
-    'default-case': 'off', // TSC already takes care of these checks
-    'no-loop-func': 'off',
-    'unicorn/no-fn-reference-in-iterator': 'off',
-    'extended/consistent-err-names': 'off',
-    'unicorn/prefer-replace-all': 'off',
-    'unicorn/catch-error-name': ['error', { name: 'error' }],
-    'unicorn/no-reduce': 'off',
-    'no-duplicate-imports': 'off', // Incompatible with type imports
-    'unicorn/consistent-destructuring': 'off',
-    'unicorn/no-array-callback-reference': 'off',
-    'unicorn/no-new-array': 'off',
-
-    // TS
-    '@typescript-eslint/lines-between-class-members': ['error', { exceptAfterSingleLine: true }],
-    '@typescript-eslint/no-invalid-void-type': 'off', // breaks with default void in Asynchandler 2nd generic
-    '@typescript-eslint/array-type': ['error', { default: 'array' }],
-    '@typescript-eslint/generic-type-naming': 'off',
-    '@typescript-eslint/no-empty-interface': 'off',
-    '@typescript-eslint/no-unnecessary-condition': 'off', // Problems with optional parameters
-    '@typescript-eslint/space-before-function-paren': ['error', 'never'],
-    '@typescript-eslint/promise-function-async': 'off',
-    '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'angle-bracket' }],
-    '@typescript-eslint/member-naming': 'off',
-    '@typescript-eslint/naming-convention': [
-      'error',
-      {
-        selector: 'interface',
-        format: ['PascalCase'],
-        custom: {
-          regex: '^I[A-Z]',
-          match: true,
-        },
-      },
-    ],
-    '@typescript-eslint/no-dynamic-delete': 'off',
-    '@typescript-eslint/explicit-function-return-type': [
-      'error',
-      {
+      }],
+      'unicorn/consistent-function-scoping': 'off',
+      'no-warning-comments': 'off',
+      'no-mixed-operators': 'off',
+      'prefer-destructuring': 'off',
+      'default-case': 'off', // TSC already takes care of these checks
+      'no-loop-func': 'off',
+      'unicorn/no-fn-reference-in-iterator': 'off',
+      'extended/consistent-err-names': 'off',
+      'unicorn/prefer-replace-all': 'off',
+      'unicorn/catch-error-name': ['error', { name: 'error' }],
+      'unicorn/no-reduce': 'off',
+      'no-duplicate-imports': 'off', // Incompatible with type imports
+      'unicorn/consistent-destructuring': 'off',
+      'unicorn/no-array-callback-reference': 'off',
+      'unicorn/no-new-array': 'off',
+  
+      // TS
+      '@typescript-eslint/lines-between-class-members': ['error', { exceptAfterSingleLine: true }],
+      '@typescript-eslint/no-invalid-void-type': 'off', // breaks with default void in Asynchandler 2nd generic
+      '@typescript-eslint/array-type': ['error', { default: 'array' }],
+      '@typescript-eslint/generic-type-naming': 'off',
+      '@typescript-eslint/no-empty-interface': 'off',
+      '@typescript-eslint/no-unnecessary-condition': 'off', // Problems with optional parameters
+      '@typescript-eslint/space-before-function-paren': 'off',
+      '@typescript-eslint/promise-function-async': 'off',
+      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'angle-bracket' }],
+      '@typescript-eslint/member-naming': 'off',
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          'selector': 'interface',
+          'format': ['PascalCase'],
+          'custom': {
+            'regex': '^I[A-Z]',
+            'match': true
+          }
+        }
+      ],
+      '@typescript-eslint/no-dynamic-delete': 'off',
+      '@typescript-eslint/explicit-function-return-type': ['error', {
         allowExpressions: true,
         allowTypedFunctionExpressions: true,
         allowHigherOrderFunctions: true,
