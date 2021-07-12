@@ -39,7 +39,7 @@ module.exports = {
       // Default
       'array-bracket-spacing': 'off',
       'class-methods-use-this': 'off', // Conflicts with functions from interfaces that sometimes don't require `this`
-      'comma-dangle': ['error', 'always-multiline'],
+      'comma-dangle': 'off',
       'dot-location': ['error', 'property'],
       'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
       'no-underscore-dangle': 'off', // Conflicts with external libraries
@@ -86,7 +86,7 @@ module.exports = {
       '@typescript-eslint/generic-type-naming': 'off',
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/no-unnecessary-condition': 'off', // Problems with optional parameters
-      '@typescript-eslint/space-before-function-paren': ['error', 'never'],
+      '@typescript-eslint/space-before-function-paren': 'off',
       '@typescript-eslint/promise-function-async': 'off',
       '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'angle-bracket' }],
       '@typescript-eslint/member-naming': 'off',
