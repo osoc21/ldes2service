@@ -32,8 +32,9 @@
   "dependencies": {
     "@comunica/core": "~1.19.2",
     "@ldes/ldes-dummy-connector": "^0.0.0",
-    "@ldes/ldes-postgres-connector": "^0.0.0",
     "@ldes/ldes-dummy-state": "^0.0.0",
+    "@ldes/ldes-postgres-connector": "^0.0.0",
+    "@ldes/types": "^0.0.0",
     "@treecg/actor-init-ldes-client": "^2.3.2",
     "dotenv": "^10.0.0"
   }

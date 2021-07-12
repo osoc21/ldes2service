@@ -24,6 +24,7 @@
     "url": "https://github.com/osoc21/ldes2service/issues"
   },
   "dependencies": {
+    "@ldes/types": "^0.0.0",
     "jsonld": "^5.2.0",
     "mongodb": "^3.6.8",
     "mongoose": "^5.13.2"
