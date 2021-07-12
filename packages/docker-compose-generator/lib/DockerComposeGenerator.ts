@@ -20,7 +20,7 @@ export class DockerComposeGenerator {
         mongo: {
           image: 'mongo',
           restart: 'always',
-          environnement: {
+          environment: {
             MONGO_INITDB_ROOT_USERNAME: 'root',
             MONGO_INITDB_ROOT_PASSWORD: '',
           },
@@ -33,7 +33,7 @@ export class DockerComposeGenerator {
         postgres: {
           image: 'postgres',
           restart: 'always',
-          environnement: {
+          environment: {
             POSTGRES_PASSWORD: '',
           },
         },
