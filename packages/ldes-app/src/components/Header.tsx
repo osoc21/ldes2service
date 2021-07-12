@@ -1,5 +1,6 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ReactComponent as Crest } from '../assets/crest.svg';
+import { Crest } from '../assets/crest';
 
 export function Header() {
   return (

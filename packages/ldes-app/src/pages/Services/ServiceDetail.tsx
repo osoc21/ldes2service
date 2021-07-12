@@ -1,3 +1,4 @@
+import React from 'react';
 import { IConnectorService } from '../../../../ldes-types';
 import { H1, H2, H3 } from '../../components/Headings';
 import { Input, InputGroup, Label } from '../../components/Input';

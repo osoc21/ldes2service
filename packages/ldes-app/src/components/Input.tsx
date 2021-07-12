@@ -1,3 +1,4 @@
+import React from 'react';
 import c from '../utils/c';
 
 type InputGroupProps = {

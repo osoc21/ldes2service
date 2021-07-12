@@ -1,3 +1,4 @@
+import React from 'react';
 import { useServices } from '../../hooks/api/useService';
 import useParams from '../../hooks/useParams';
 import { ServiceDetail } from './ServiceDetail';

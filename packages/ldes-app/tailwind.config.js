@@ -1,7 +1,7 @@
 // https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js
 
 module.exports = {
-  purge: ['./src/**/*.ts', './public/**/*.html'],
+  purge: ['./src/**/*.ts', './src/**/*.tsx', './**/*.html'],
   theme: {
     fontFamily: {
       sans: [
