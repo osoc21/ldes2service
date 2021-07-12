@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@ldes/types": "^0.0.0",
-    "@tailwindcss/forms": "^0.3.3",
     "@types/node": "^12.20.16",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
@@ -14,12 +13,15 @@
     "react-query": "^3.18.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "autoprefixer": "^9.8.6",
+    "postcss": "^7.0.36",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.4"
   },
   "scripts": {
     "start": "yarn css:dev && react-scripts start",
     "build": "yarn css:prod && react-scripts build",
-    "css:dev": "tailwind build -i ./src/theme/index.css -c ./tailwind.config.js -o ./src/theme/tailwind.css",
+    "css:dev": "./node_modules/tailwindcss/lib/cli.js build -i ./src/theme/index.css -c ./tailwind.config.js -o ./src/theme/tailwind.css",
     "css:prod": "NODE_ENV=production yarn css:dev"
   },
   "eslintConfig": {
@@ -39,10 +41,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.36",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.4"
   }
 }
