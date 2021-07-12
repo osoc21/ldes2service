@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  backend:
+    image: elasticsearch:7.13.3
+    environment:
+      - node.name=es01
+      - cluster.name=es01-docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es_data:/var/lib/elasticsearch/data
+    ports:
+      - '9200:9200'
+    networks:
+      - elastic
+
+  replicator:
+    build: .
+    command: sh
+    tty: true
+    stdin_open: true
+    environment:
+      ELASTICSEARCH_NODE_URL: 'http://backend:9200'
+      ELASTICSEARCH_USER: 'user'
+      ELASTICSEARCH_PASSWORD: 'password'
+    #      # TODO add environment variables
+    volumes:
+      - './packages:/app/packages'
+    networks:
+      - elastic
+    depends_on:
+      - backend
+
+#  kib01:
+#    image: kibana:7.13.3
+#    ports:
+#      - '5601:5601'
+#    environment:
+#      #      ELASTICSEARCH_URL: http://es01:9200
+#      ELASTICSEARCH_HOSTS: 'http://es01:9200'
+#    networks:
+#      - elastic
+
+volumes:
+  es_data:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge

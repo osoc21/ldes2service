@@ -34,6 +34,7 @@
     "@ldes/ldes-dummy-connector": "^0.0.0",
     "@ldes/ldes-postgres-connector": "^0.0.0",
     "@ldes/ldes-dummy-state": "^0.0.0",
+    "@ldes/ldes-elasticsearch-connector": "^0.0.0",
     "@treecg/actor-init-ldes-client": "^2.3.2",
     "dotenv": "^10.0.0"
   }

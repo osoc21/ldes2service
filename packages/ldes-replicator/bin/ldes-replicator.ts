@@ -3,7 +3,7 @@
  */
 
 import { DummyState } from '@ldes/ldes-dummy-state';
-import { PostgresConnector } from '@ldes/ldes-postgres-connector';
+import { ElasticSearchConnector } from '@ldes/ldes-elasticsearch-connector';
 
 import { newEngine } from '@treecg/actor-init-ldes-client';
 import { Orchestrator } from '../lib/Orchestrator';
@@ -14,7 +14,7 @@ const URL = process.env.URL;
 const POLL_INTERVAL = Number.parseInt(process.env.pollingInterval ?? '5000', 10);
 
 async function run(): Promise<void> {
-  const connector = new PostgresConnector({ amountOfVersions: 0, databaseName: 'ldes' });
+  const connector = new ElasticSearchConnector({ amountOfVersions: 0, databaseName: 'ldes' });
   const state = new DummyState();
 
   const options = {
