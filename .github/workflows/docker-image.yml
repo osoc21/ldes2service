@@ -1,18 +1,23 @@
-name: Docker Image ldes-replicator
+name: Release
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+'
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ldes-replicator:$(date +%s)
+      - uses: actions/checkout@v2
+
+      - name: Version of the tag
+        id: version
+        run: echo ::set-output name=value::$(echo ${GITHUB_REF/refs\/tags\//} | sed 's/^v//')
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ldes-replicator:${{ steps.version.outputs.value }}
+
+      - name: Push the Docker image
+        run: docker push ghcr.io/osoc21/ldes-replicator:${{ steps.version.outputs.value }}
