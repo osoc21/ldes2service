@@ -1,5 +1,5 @@
 import { DummyState } from '@ldes/ldes-dummy-state';
-import { MongoDBConnector } from '@ldes/ldes-mongodb-connector';
+import { MongoDbConnector } from '@ldes/ldes-mongodb-connector';
 import { PostgresConnector } from '@ldes/ldes-postgres-connector';
 import type { IManagerConfig } from '../lib/Manager';
 import { Manager } from '../lib/Manager';
@@ -8,7 +8,7 @@ const config: IManagerConfig = {
   state: DummyState,
   connectors: {
     postgres: PostgresConnector,
-    mongodb: MongoDBConnector,
+    mongodb: MongoDbConnector,
   },
   queryServices: [
     {
