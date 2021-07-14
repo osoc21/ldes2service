@@ -1,10 +1,10 @@
-const { MongoDBConnector } = require('../..');
+const { MongoDbConnector } = require('../..');
 
 describe('ldes-mongodb-connector', () => {
   let connector;
 
   beforeEach(async () => {
-    connector = new MongoDBConnector({
+    connector = new MongoDbConnector({
       amountOfVersions: 2,
       databaseName: 'ldes',
     });
