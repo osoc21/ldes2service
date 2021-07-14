@@ -1,4 +1,3 @@
-import React from 'react';
 import c from '../utils/c';
 
 type Props = {

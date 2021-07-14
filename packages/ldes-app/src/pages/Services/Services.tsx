@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { IConnectorService } from '../../../../ldes-types';
 import { H1, H2 } from '../../components/Headings';

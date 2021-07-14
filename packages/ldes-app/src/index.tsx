@@ -3,7 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import './theme/index.css';
+import './theme/tailwind.css';
+import './theme/test.css';
 import { App } from './App';
 
 const queryClient = new QueryClient();

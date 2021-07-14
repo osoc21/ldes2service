@@ -1,0 +1,57 @@
+{
+  "private": true,
+  "repository": "https://github.com/informatievlaanderen/ldes2service",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=14.0"
+  },
+  "scripts": {
+    "start": "cd packages/ldes-replicator && npm run start",
+    "build-changed": "lerna run build --since HEAD",
+    "build": "npm run build:ts",
+    "build:ts": "tsc",
+    "test:integration": "jest __tests__/integration",
+    "test:integration:docker": "docker-compose -f docker-compose.test.yml up -d && npm run test:integration && docker-compose -f docker-compose.test.yml down",
+    "eslint": "eslint --ext ts",
+    "eslint:cache": "npm run eslint -- --cache",
+    "prettier": "prettier --check \"./**/*.{ts,json,md,yml}\"",
+    "lint": "npm run eslint && npm run prettier",
+    "lint:fix": "npm run eslint -- --fix && npm run prettier -- --write",
+    "clean": "rm -rf ./node_modules && rm -rf ./packages/*/node_modules",
+    "postinstall": "npm run bootstrap",
+    "bootstrap": "lerna bootstrap"
+  },
+  "devDependencies": {
+    "@types/node": "^16.0.0",
+    "eslint": "^7.30.0",
+    "eslint-config-es": "3.29.11",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
+    "eslint-plugin-unused-imports": "^1.1.2",
+    "jest": "^24.9.0",
+    "lerna": "^4.0.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
+  },
+  "pre-commit": [
+    "build",
+    "lint"
+  ],
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 110,
+    "arrowParens": "avoid"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  }
+}

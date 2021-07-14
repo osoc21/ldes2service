@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useServices } from '../../hooks/api/useServices';
 import { ServiceDetail } from './ServiceDetail';
