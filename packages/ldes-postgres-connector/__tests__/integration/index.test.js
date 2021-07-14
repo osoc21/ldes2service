@@ -7,6 +7,11 @@ describe('ldes-postgres-connector', () => {
     connector = new PostgresConnector({
       amountOfVersions: 2,
       databaseName: 'ldes',
+      username: 'postgres',
+      password: 'postgres',
+      database: 'postgres',
+      hostname: 'localhost',
+      port: 5432
     });
 
     await connector.provision();

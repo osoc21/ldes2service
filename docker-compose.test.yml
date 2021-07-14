@@ -1,5 +1,10 @@
 mongo:
-  image: mongo:4
+  image: 'bitnami/mongodb'
+  restart: 'always'
+  environment:
+    MONGODB_USERNAME: ${MONGO_USER}
+    MONGODB_PASSWORD: ${MONGO_PASSWORD}
+    MONGODB_DATABASE: ${MONGO_DB}
   ports:
     - 27017:27017
 
@@ -10,4 +15,4 @@ postgres:
     POSTGRES_USER: ${POSTGRES_USER}
     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   ports:
-    - '${POSTGRES_PORT}:5432'
+    - 5432:5432

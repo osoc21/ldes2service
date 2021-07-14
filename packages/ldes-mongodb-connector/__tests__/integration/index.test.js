@@ -7,6 +7,11 @@ describe('ldes-mongodb-connector', () => {
     connector = new MongoDbConnector({
       amountOfVersions: 2,
       databaseName: 'ldes',
+      username: 'mongo',
+      password: 'mongo',
+      database: 'ldes',
+      hostname: 'localhost',
+      port: 27017
     });
 
     await connector.provision();

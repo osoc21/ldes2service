@@ -102,7 +102,7 @@ values:
     await this.client.connect();
 
     // Establish and verify connection
-    this.db = this.client.db(this.config.databaseName);
+    this.db = this.client.db(this.config.database);
   }
 
   private getURI(): string {
