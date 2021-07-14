@@ -14,7 +14,17 @@ const URL = process.env.URL;
 const POLL_INTERVAL = Number.parseInt(process.env.pollingInterval ?? '5000', 10);
 
 async function run(): Promise<void> {
-  const connector = new PostgresConnector({ amountOfVersions: 0, databaseName: 'ldes' });
+  const config = {
+    amountOfVersions: 0,
+    databaseName: 'ldes',
+    username: process.env.POSTGRES_USERNAME ?? 'postgres',
+    password: process.env.POSTGRES_PASSWORD ?? 'postgres',
+    database: process.env.POSTGRES_DATABASE ?? 'postgres',
+    hostname: process.env.POSTGRES_HOSTNAME ?? '127.0.0.1',
+    port: Number.parseInt(process.env.POSTGRES_PORT ?? '5432', 10),
+  };
+
+  const connector = new PostgresConnector(config);
   const state = new DummyState();
 
   const options = {
