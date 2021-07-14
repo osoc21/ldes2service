@@ -1,46 +1,34 @@
+import type { IGeneratorApiSetup } from '@ldes/types';
+import { parse } from 'yaml';
+
 const composer = require('docker-composer');
+const format = require('string-format');
+
+interface IComposeFile {
+  version: string;
+  services: Record<string, any>;
+}
 
 export class DockerComposeGenerator {
-  private readonly options: any;
+  private options: IGeneratorApiSetup[];
 
-  public constructor(options: any) {
+  public setup(options: IGeneratorApiSetup[]): void {
     this.options = options;
   }
 
-  public createDockerCompose(): string {
-    const dockerFile = {
+  public generate(services: string[], settings: Record<string, any>): string {
+    const dockerFile: IComposeFile = {
       version: '3.9',
       services: {},
     };
 
-    console.debug('options :', this.options);
+    for (const service of this.options) {
+      if (services.includes(service.id)) {
+        const formattedService = parse(format(service.composeTemplate, settings[service.id]));
 
-    if (this.options.services.includes('MONGODB')) {
-      Object.assign(dockerFile.services, {
-        mongo: {
-          image: 'mongo',
-          restart: 'always',
-          environment: {
-            MONGO_INITDB_ROOT_USERNAME: 'root',
-            MONGO_INITDB_ROOT_PASSWORD: '',
-          },
-        },
-      });
+        Object.assign(dockerFile.services, formattedService);
+      }
     }
-
-    if (this.options.services.includes('POSTGRES')) {
-      Object.assign(dockerFile.services, {
-        postgres: {
-          image: 'postgres',
-          restart: 'always',
-          environment: {
-            POSTGRES_PASSWORD: '',
-          },
-        },
-      });
-    }
-
-    console.debug('docker-compose json:', dockerFile);
 
     return composer.generate(dockerFile);
   }
