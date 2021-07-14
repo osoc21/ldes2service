@@ -2,12 +2,20 @@ import type { IWritableConnector, IConfigConnector } from '@ldes/types';
 import type { Db } from 'mongodb';
 import { MongoClient } from 'mongodb';
 
-export class MongoDBConnector implements IWritableConnector {
-  private readonly config: IConfigConnector;
+export interface IConfigMongoDbConnector extends IConfigConnector {
+  username: string;
+  hostname: string;
+  database: string;
+  password: string;
+  port: number;
+}
+
+export class MongoDbConnector implements IWritableConnector {
+  private readonly config: IConfigMongoDbConnector;
   private client: MongoClient;
   private db: Db;
 
-  public constructor(config: IConfigConnector) {
+  public constructor(config: IConfigMongoDbConnector) {
     this.config = config;
   }
 
@@ -58,7 +66,7 @@ export class MongoDBConnector implements IWritableConnector {
    * Initializes the backend system by creating tables, counters and/or enabling plugins
    */
   public async provision(): Promise<void> {
-    const url = 'mongodb://localhost:27017';
+    const url = this.getURI();
 
     this.client = new MongoClient(url);
 
@@ -67,6 +75,12 @@ export class MongoDBConnector implements IWritableConnector {
 
     // Establish and verify connection
     this.db = this.client.db(this.config.databaseName);
+  }
+
+  private getURI(): string {
+    const config = this.config;
+
+    return `mongodb://${config.username}:${config.password}@${config.hostname}:${config.port}/${config.database}`;
   }
 
   /**
