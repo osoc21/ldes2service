@@ -26,6 +26,8 @@ mongo:
     MONGODB_USERNAME: {username}
     MONGODB_PASSWORD: {password}
     MONGODB_DATABASE: {database}
+  ports:
+    - "{port}:27017"
   `;
 
   public static helmTemplate = `
@@ -35,9 +37,10 @@ namespace: ldes
 createNamespace: true
 values:
   - auth:
-      username: {username}
-      password: {password}
-      database: {database}
+      username: "{username}"
+      password: "{password}"
+      database: "{database}"
+  - service.nodePort: "{port}"
   `;
 
   public constructor(config: IConfigMongoDbConnector) {

@@ -26,6 +26,8 @@ postgres:
     POSTGRES_USER: {username}
     POSTGRES_PASSWORD: {password}
     POSTGRES_DB: {database}
+  ports:
+    - "{port}:5432"
     `;
 
   public static helmTemplate = `
@@ -34,9 +36,10 @@ chart: bitnami/postgresql
 namespace: ldes
 createNamespace: true
 values:
-  - postgresqlUsername: {username}
-  - postgresqlPassword: {password}
-  - postgresqlDatabase: {database}
+  - postgresqlUsername: "{username}"
+  - postgresqlPassword: "{password}"
+  - postgresqlDatabase: "{database}"
+  - service.nodePort: "{port}"
     `;
 
   public constructor(config: IConfigPostgresConnector) {
