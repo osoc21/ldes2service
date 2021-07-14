@@ -15,6 +15,31 @@ export class MongoDbConnector implements IWritableConnector {
   private client: MongoClient;
   private db: Db;
 
+  /**
+   * Templates for the backend generator.
+   */
+  public static composeTemplate = `
+mongo:
+  image: bitnami/mongodb
+  restart: always
+  environment:
+    MONGODB_USERNAME: {username}
+    MONGODB_PASSWORD: {password}
+    MONGODB_DATABASE: {database}
+  `;
+
+  public static helmTemplate = `
+name: mongo
+chart: bitnami/mongodb
+namespace: ldes
+createNamespace: true
+values:
+  - auth:
+      username: {username}
+      password: {password}
+      database: {database}
+  `;
+
   public constructor(config: IConfigMongoDbConnector) {
     this.config = config;
   }

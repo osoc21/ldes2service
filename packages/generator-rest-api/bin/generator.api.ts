@@ -1,5 +1,7 @@
 import { DockerComposeGenerator } from '@ldes/docker-compose-generator';
 import { HelmFileGenerator } from '@ldes/helm-file-generator';
+import { MongoDbConnector } from '@ldes/ldes-mongodb-connector';
+import { PostgresConnector } from '@ldes/ldes-postgres-connector';
 import type { IGeneratorApiSetup } from '@ldes/types';
 
 const fastify = require('fastify')({ logger: true });
@@ -11,48 +13,13 @@ const helmFileGenerator = new HelmFileGenerator();
 const setup: IGeneratorApiSetup[] = [
   {
     id: 'postgres',
-    helmTemplate: `
-name: postgres
-chart: bitnami/postgresql
-namespace: ldes
-createNamespace: true
-values:
-  - postgresqlUsername: {username}
-  - postgresqlPassword: {password}
-  - postgresqlDatabase: {database}
-    `,
-    composeTemplate: `
-postgres: 
-  image: postgres
-  restart: always
-  environment:
-    POSTGRES_USER: {username}
-    POSTGRES_PASSWORD: {password}
-    POSTGRES_DB: {database}
-    `,
+    helmTemplate: PostgresConnector.helmTemplate,
+    composeTemplate: PostgresConnector.composeTemplate,
   },
   {
     id: 'mongodb',
-    helmTemplate: `
-name: mongo
-chart: bitnami/mongodb
-namespace: ldes
-createNamespace: true
-values:
-  - auth:
-      username: {username}
-      password: {password}
-      database: {database}
-    `,
-    composeTemplate: `
-mongo:
-  image: bitnami/mongodb
-  restart: always
-  environment:
-    MONGODB_USERNAME: {username}
-    MONGODB_PASSWORD: {password}
-    MONGODB_DATABASE: {database}
-    `,
+    helmTemplate: MongoDbConnector.helmTemplate,
+    composeTemplate: MongoDbConnector.composeTemplate,
   },
 ];
 
@@ -79,6 +46,7 @@ fastify.post(
   async (_request: any, _reply: any) => {
     dockerComposeGenerator.setup(_request.body);
     helmFileGenerator.setup(_request.body);
+    _reply.send('Generators updated.');
   }
 );
 

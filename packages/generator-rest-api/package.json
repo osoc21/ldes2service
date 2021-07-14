@@ -24,7 +24,12 @@
   },
   "dependencies": {
     "fastify": "^3.19.1",
-    "@ldes/docker-compose-generator": "^0.0.0",
+    "@ldes/docker-compose-generator": "^0.0.2",
     "@ldes/helm-file-generator": "^0.0.0"
+  },
+  "devDependencies": {
+    "@ldes/types": "^0.0.0",
+    "@ldes/ldes-postgres-connector": "^0.0.0",
+    "@ldes/ldes-mongodb-connector": "^0.0.0"
   }
 }

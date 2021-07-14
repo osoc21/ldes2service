@@ -3,6 +3,13 @@ import type { IWritableConnector } from '@ldes/types';
 export class DummyConnector implements IWritableConnector {
   private readonly members: any[];
 
+  /**
+   * Templates for the backend generator.
+   */
+  public static composeTemplate = ``;
+
+  public static helmTemplate = ``;
+
   public constructor() {
     this.members = [];
   }
