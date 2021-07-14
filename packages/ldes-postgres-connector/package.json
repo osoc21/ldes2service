@@ -29,7 +29,6 @@
     "@ldes/types": "^0.0.0"
   },
   "dependencies": {
-    "@ldes/types": "^0.0.0",
     "@types/pg": "^8.6.0",
     "pg": "^8.6.0"
   }

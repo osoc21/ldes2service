@@ -1,6 +1,6 @@
 {
   "name": "@ldes/docker-compose-generator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A service to create docker-compose file",
   "keywords": [
     "docker"
@@ -29,5 +29,8 @@
     "docker-composer": "^4.0.1",
     "string-format": "^2.0.0",
     "yaml": "^1.10.2"
+  },
+  "devDependencies": {
+    "@ldes/types": "^0.0.0"
   }
 }

@@ -15,6 +15,30 @@ export class PostgresConnector implements IWritableConnector {
   private pool: Pool;
   private poolClient: PoolClient;
 
+  /**
+   * Templates for the backend generator.
+   */
+  public static composeTemplate = `
+postgres: 
+  image: postgres
+  restart: always
+  environment:
+    POSTGRES_USER: {username}
+    POSTGRES_PASSWORD: {password}
+    POSTGRES_DB: {database}
+    `;
+
+  public static helmTemplate = `
+name: postgres
+chart: bitnami/postgresql
+namespace: ldes
+createNamespace: true
+values:
+  - postgresqlUsername: {username}
+  - postgresqlPassword: {password}
+  - postgresqlDatabase: {database}
+    `;
+
   public constructor(config: IConfigPostgresConnector) {
     this.config = config;
   }

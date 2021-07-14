@@ -25,5 +25,8 @@
   "dependencies": {
     "string-format": "^2.0.0",
     "yaml": "^1.10.2"
+  },
+  "devDependencies": {
+    "@ldes/types": "^0.0.0"
   }
 }
