@@ -1,11 +1,10 @@
 {
-  "name": "docker-compose-generator",
+  "name": "@ldes/docker-compose-generator",
   "version": "0.0.1",
   "description": "A service to create docker-compose file",
   "keywords": [
     "docker"
   ],
-  "author": "Clément <vandendaelenclement@gmail.com>",
   "homepage": "https://github.com/osoc21/ldes2service#readme",
   "license": "MIT",
   "main": "index.js",
@@ -28,6 +27,7 @@
   },
   "dependencies": {
     "docker-composer": "^4.0.1",
-    "fastify": "^3.18.1"
+    "string-format": "^2.0.0",
+    "yaml": "^1.10.2"
   }
 }
