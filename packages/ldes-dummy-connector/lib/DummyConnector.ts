@@ -3,13 +3,6 @@ import type { IConfigConnector, IWritableConnector, LdesShape } from '@ldes/type
 export class DummyConnector implements IWritableConnector {
   private readonly members: any[];
 
-  /**
-   * Templates for the backend generator.
-   */
-  public static composeTemplate = ``;
-
-  public static helmTemplate = ``;
-
   public constructor(config: IConfigConnector, shape: LdesShape, id: string) {
     this.members = [];
     console.log('Shape:');

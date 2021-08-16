@@ -5,6 +5,11 @@ export const template: IConfigTemplate = {
   image: 'mongo:latest',
   fields: [
     {
+      name: 'hostname',
+      validation: ['required', 'string'],
+      value: 'default value',
+    },
+    {
       name: 'username',
       validation: ['required', 'string'],
       value: 'default value',

@@ -1,7 +1,11 @@
 import type { IConnectorConfig } from '@ldes/types';
 import * as execa from 'execa';
 
-const LDES_CONNECTORS = new Set(['@ldes/ldes-postgres-connector', '@ldes/ldes-mongodb-connector']);
+const LDES_CONNECTORS = new Set([
+  '@ldes/ldes-postgres-connector',
+  '@ldes/ldes-mongodb-connector',
+  '@ldes/ldes-graphdb-connector',
+]);
 
 export async function dependenciesSetup(config: any): Promise<void> {
   const neededConnectors = Object.values(config.connectors).map((con: IConnectorConfig) => con.type);

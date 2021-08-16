@@ -1,0 +1,34 @@
+{
+  "name": "@ldes/ldes-graphdb-connector",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "homepage": "https://github.com/Informatievlaanderen/ldes2service#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "typings": "index",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "index.d.ts",
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Informatievlaanderen/ldes2service.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/Informatievlaanderen/ldes2service/issues"
+  },
+  "devDependencies": {
+    "@ldes/types": "^0.0.0"
+  },
+  "dependencies": {
+    "@innotrade/enapso-graphdb-client": "^1.8.3"
+  }
+}

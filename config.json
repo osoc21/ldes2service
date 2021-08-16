@@ -3,6 +3,9 @@
     "ldes": [
       {
         "url": "https://smartdata.dev-vlaanderen.be/base/straatnaam"
+      },
+      {
+        "url": "https://smartdata.dev-vlaanderen.be/base/gemeente"
       }
     ],
     "state": {
@@ -13,13 +16,12 @@
   },
   "connectors": {
     "PG": {
-      "type": "@ldes/ldes-postgres-connector",
+      "type": "@ldes/ldes-graphdb-connector",
       "settings": {
-        "username": "postgres",
-        "password": "postgres",
-        "database": "postgres",
-        "hostname": "localhost",
-        "port": 5432
+        "baseUrl": "http://localhost:7200",
+        "repository": "straatnaam",
+        "username": "test",
+        "password": "test"
       }
     }
   }
