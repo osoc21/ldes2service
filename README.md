@@ -13,7 +13,7 @@ A Linked Data Event Stream (LDES) is a collection of immutable objects. The HTTP
 ```bash
 npm install
 npm run build
-cd packages/ldes-replicator && npm run start
+npm run start -- -h
 ```
 
 ## Components
@@ -26,6 +26,9 @@ A connector implementation for PostgreSQL.
 
 **ldes-mongodb-connector:**<br />
 A connector implementation for MongoDB.
+
+**ldes-graphdb-connector:**<br />
+A connector implementation for GraphDB. (can be easily extended to any other datastore compatible with SPARQL)
 
 **ldes-dummy-state:**<br />
 An example to write your own state.
@@ -60,6 +63,47 @@ Exposes the helm/compose file generators as a Fastify plugin.
 - [Ryan Byloos](https://github.com/ryanbyloos)
 - [Wout Verbiest](https://github.com/woutverbiest)
 
+## Config file
+
+The LDES Replicator is a CLI that takes a JSON file for configuration.
+
+```json
+{
+  // Main settings
+  "replicator": {
+    "ldes": [
+      {
+        "url": "URL to the LDES"
+      },
+      {
+        "url": "URL to the LDES",
+        "shapeUrl": "URL or path of a SHACL shape"
+      }
+    ],
+    "state": {
+      "id": "Used to identify the state in a shared redis server",
+      "host": "hostname",
+      "port": "port number",
+      "password": "password, if needed"
+    },
+    "polling_interval": "delay in ms"
+  },
+  // Connector settings
+  "connectors": {
+    "PG": {
+      // NPM package to use as a connector
+      "type": "@ldes/ldes-graphdb-connector",
+      // Connector specific settings cf. Connectors
+      "settings": {
+        ...
+      }
+    }
+  }
+}
+```
+
+Once the config file is created you can start the LDES replicator with `npm run start -- <config_path>`
+
 ## Running it with Docker
 
 The LDES Replicator is available as a docker image: `ghcr.io/osoc21/ldes-replicator:helm-chart`
@@ -82,6 +126,9 @@ docker run \
 
 ### Environment Variables
 
+Environment used to automatically create a [Config file](#config-file), otherwise those can be ignored
+and a config file mounted at `./config.json`.
+
 - `URLS`: comma-separated list of LDES URLs.
 - `STATE_CONFIG`: JSON object with the Redis connection settings.
 
@@ -102,17 +149,36 @@ docker run \
 - `CONNECTOR_<ID>_TYPE`: Name of the NPM package to use as a backend connector, a list of those can be found below.
 - `CONNECTOR_<ID>_CONFIG`: JSON object with the backend connector settings, those will depend on the connector used.
 
-### Connectors
+## Connectors
 
-#### @ldes/ldes-postgres-connector
+### Generic settings
+
+The connectors will try to implement generic settings to allow a more customizable replication
+(ex. keep X versions, store X field as geospatial...):
+
+```js
+CONFIG:
+{
+  // Handles versioning, a SHACL shape is required. If not provided all the versions will be kept.
+  versions: {
+    // Amount of versions to keep
+    amount: number,
+    // Field of the LDES that identifies versions of the same object
+    identifier: string,
+    // Field of the LDES used to sort the versions (and get rid of the older ones)
+    sorter: string,
+  },
+  "other connector specific settings": ...
+}
+```
+
+### @ldes/ldes-postgres-connector
 
 Stores the Linked Data Events inside a postgres DB backend.
 
 ```js
 CONFIG:
 {
-  //The name of the table the events will be stored in
-  "tableName": string,
   //The Postgres server credentials
   "username": string,
   "password": string,
@@ -120,27 +186,39 @@ CONFIG:
   //The Postgres server hostname/IP address and port
   "hostname": string,
   "port": number
-  //How many versions of an LDES element should be kept (0 => any amount)
-  "amountOfVersions": number
 }
 ```
 
-#### @ldes/ldes-mongodb-connector
+### @ldes/ldes-mongodb-connector
 
 Stores the Linked Data Events inside a MongoDB backend.
 
 ```js
 CONFIG:
 {
-  //The MongoDB server credentials
+  //The MongoDB server credentials, if needed
   "username": string,
   "password": string,
   "database": string,
   //The MongoDB server hostname/IP address and port
   "hostname": string,
   "port": number
-  //How many versions of an LDES element should be kept (0 => any amount)
-  "amountOfVersions": number
+}
+```
+
+### @ldes/ldes-graphdb-connector
+
+Stores the Linked Data Events inside a GraphDB backend.
+
+```js
+CONFIG:
+{
+  //The GraphDB server credentials, if needed
+  "password": string,
+  "database": string,
+  //The GraphDB server connection string and the repository to use
+  "baseUrl": string,
+  "repository": number
 }
 ```
 
@@ -167,8 +245,6 @@ services:
       CONNECTORS: '[postgres]'
       CONNECTOR_postgres_TYPE: '@ldes/ldes-postgres-connector'
       CONNECTOR_postgres_CONFIG: '{
-        "amountOfVersions":0,
-        "tableName":"ldes",
         "username":"postgres",
         "password":"postgres",
         "database":"postgres",
@@ -212,8 +288,6 @@ releases:
           PG:
             type: '@ldes/ldes-postgres-connector'
             settings:
-              amountOfVersions: 0
-              tableName: 'ldes'
               username: 'postgres'
               password: 'postgres'
               database: 'postgres'

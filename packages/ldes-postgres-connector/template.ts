@@ -28,11 +28,6 @@ export const template: IConfigTemplate = {
       validation: ['required', 'string'],
       value: 'postgres',
     },
-    {
-      name: 'tableName',
-      validation: ['required', 'string'],
-      value: 'ldes',
-    },
   ],
   composeTemplate: `
 {hostname}: 

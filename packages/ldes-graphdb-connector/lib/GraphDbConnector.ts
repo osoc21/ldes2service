@@ -18,7 +18,6 @@ export interface IConfigGraphDbConnector extends IConfigConnector {
 }
 
 const defaultConfig: IConfigGraphDbConnector = {
-  amountOfVersions: 0,
   baseUrl: 'http://localhost:7200',
   repository: 'Test',
 };
@@ -35,6 +34,57 @@ export class GraphDbConnector implements IWritableConnector {
     this.config = { ...defaultConfig, ...config };
     this.id = id;
     this.shape = shape;
+  }
+
+  private async versioning(member: any): Promise<void> {
+    if (!this.config.versions) {
+      return;
+    }
+
+    const versionId = this.config.versions.identifier;
+    const sorterSlug = this.config.versions.sorter;
+    const version = this.rdfValueHandler(member[this.config.versions.identifier]);
+
+    const request = await this.endpoint.query(
+      `select ?id where { 
+        ?id <${versionId}> ${version} .
+        ?id <${sorterSlug}> ?sort .
+      } order by asc(?sort)`
+    );
+
+    const numberToDelete = request.results.bindings.length - this.config.versions.amount;
+
+    if (numberToDelete > 0) {
+      const idsToKeep = request.results.bindings
+        .slice(numberToDelete)
+        .map((value: any) => `"${value.id.value}"`)
+        .join(',');
+
+      const idsToRemove = request.results.bindings
+        .slice(0, numberToDelete)
+        .map((value: any) => `<${value.id.value}>`)
+        .join(',');
+
+      console.debug('To Delete:', idsToRemove);
+      console.debug('To keep:', idsToKeep);
+
+      console.debug(`DELETE {
+           ?s ?p ?o .
+        }
+        WHERE { 
+          ?s ?p ?o .
+          filter( ?s in (${idsToRemove}))
+        }`);
+      await this.endpoint.update(
+        `DELETE {
+           ?s ?p ?o .
+        }
+        WHERE { 
+          ?s ?p ?o .
+          filter( ?s in (${idsToRemove}))
+        }`
+      );
+    }
   }
 
   /**
@@ -55,6 +105,10 @@ export class GraphDbConnector implements IWritableConnector {
 
     // Console.debug('SPARQL Query:', query);
     await this.endpoint.update(query);
+
+    if (this.config.versions) {
+      await this.versioning(JSONmember);
+    }
   }
 
   /**

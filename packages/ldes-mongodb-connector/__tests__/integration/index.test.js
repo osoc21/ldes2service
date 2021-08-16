@@ -5,7 +5,11 @@ describe('ldes-mongodb-connector', () => {
 
   beforeEach(async () => {
     connector = new MongoDbConnector({
-      amountOfVersions: 2,
+      versions: {
+        sorter: "http://www.w3.org/ns/prov#generatedAtTime",
+        amount: 2,
+        identifier: "http://purl.org/dc/terms/isVersionOf",
+      },
       username: 'mongo',
       password: 'mongo',
       database: 'ldes',
@@ -69,7 +73,6 @@ describe('ldes-mongodb-connector', () => {
     );
   });
 
-  /* HAS TO BE IMPLEMENTED BACK WITH THE GENERIC APPROACH
   it('should only store the latest 2 versions', async () => {
     const member1 = JSON.stringify({
       '@id': '1_1',
@@ -116,5 +119,4 @@ describe('ldes-mongodb-connector', () => {
       ])
     );
   });
-   */
 });
