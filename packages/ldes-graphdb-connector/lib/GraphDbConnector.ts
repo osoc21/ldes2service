@@ -47,8 +47,7 @@ export class GraphDbConnector implements IWritableConnector {
     let query = Object.keys(JSONmember)
       .filter(el => !['@id', '@type'].includes(el))
       .reduce(
-        (acc, field) => `${acc};
-        <${field}> ${this.getField(JSONmember[field])} `,
+        (acc, field) => `${acc} ${this.getField(field, JSONmember[field])} `,
         `INSERT DATA { <${JSONmember['@id']}> a <${JSONmember['@type']}> `
       );
 
@@ -80,11 +79,25 @@ export class GraphDbConnector implements IWritableConnector {
     //
   }
 
-  private getField(property: any): string {
+  private rdfValueHandler(property: any): string {
     if (property?.['@id']) {
       return `<${property['@id']}>`;
     }
+    if (property?.['@type']) {
+      return `"${property['@value']}"^^<${property['@type']}>`;
+    }
+    if (property?.['@language']) {
+      return `"${property['@value']}"@${property['@language']}`;
+    }
+    return `"${property?.['@value'] ?? property ?? ''}"`;
+  }
 
-    return `"${property?.['@value'] ?? property ?? null}"`;
+  private getField(field: string, property: any): string {
+    const base = `; <${field}> `;
+    if (Array.isArray(property)) {
+      return property.map((el: any) => base + this.rdfValueHandler(el)).join(' ');
+    }
+
+    return this.rdfValueHandler(property) ? base + this.rdfValueHandler(property) : '';
   }
 }
