@@ -29,6 +29,10 @@
     "@ldes/types": "^0.0.0"
   },
   "dependencies": {
-    "@innotrade/enapso-graphdb-client": "^1.8.3"
+    "@innotrade/enapso-graphdb-client": "^1.8.3",
+    "rdf-data-factory": "^1.0.4",
+    "@types/sparqljs": "^3.1.3",
+    "jsonld-streaming-parser": "^2.4.0",
+    "sparqljs": "^3.4.2"
   }
 }

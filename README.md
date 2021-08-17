@@ -218,7 +218,9 @@ CONFIG:
   "database": string,
   //The GraphDB server connection string and the repository to use
   "baseUrl": string,
-  "repository": number
+  "repository": number,
+  //Each ldes is stored in a different graph, with this you can provide their URI prefix
+  "graphPrefix": string
 }
 ```
 
