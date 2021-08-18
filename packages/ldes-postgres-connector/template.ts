@@ -7,6 +7,7 @@ export const template: IConfigTemplate = {
     {
       name: 'hostname',
       validation: ['required', 'string'],
+      value: 'localhost',
     },
     {
       name: 'port',

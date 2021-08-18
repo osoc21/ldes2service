@@ -57,11 +57,11 @@ export class PostgresConnector implements IWritableConnector {
 
     const versionId = PostgresConnector.extractAndSlug(this.config.versions.identifier);
     const sorterSlug = PostgresConnector.extractAndSlug(this.config.versions.sorter);
-    const version = this.getField(member[this.config.versions.identifier]);
+    const element = this.getField(member[this.config.versions.identifier]);
 
     const { rows: results } = await this.poolClient.query(
       `SELECT * FROM "${this.id}" WHERE ${versionId} = $1 ORDER BY ${sorterSlug} ASC`,
-      [version]
+      [element]
     );
 
     const numberToDelete = results.length - this.config.versions.amount;

@@ -7,27 +7,33 @@ export const template: IConfigTemplate = {
     {
       name: 'hostname',
       validation: ['required', 'string'],
-      value: 'default value',
+      value: 'localhost',
     },
     {
       name: 'username',
-      validation: ['required', 'string'],
-      value: 'default value',
+      validation: ['string'],
     },
     {
       name: 'password',
-      validation: ['required', 'string'],
-      value: 'default value',
+      validation: ['string'],
     },
     {
       name: 'database',
       validation: ['required', 'string'],
-      value: 'default value',
+      value: 'admin',
     },
     {
       name: 'port',
       validation: ['required', 'number'],
-      value: 'default value',
+      value: '27017',
+    },
+    {
+      name: 'connectionString',
+      validation: ['string'],
+    },
+    {
+      name: 'extraParameters',
+      validation: ['string'],
     },
   ],
   composeTemplate: `

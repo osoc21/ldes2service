@@ -68,7 +68,8 @@ Exposes the helm/compose file generators as a Fastify plugin.
 
 ## Config file
 
-The LDES Replicator is a CLI that takes a JSON file for configuration.
+The LDES Replicator is a CLI that takes a JSON file for configuration,
+an example can be found [here](/osoc21/ldes2service/blob/main/config.json.example).
 
 ```json
 {
@@ -94,7 +95,7 @@ The LDES Replicator is a CLI that takes a JSON file for configuration.
   },
   // Connector settings
   "connectors": {
-    "PG": {
+    "graphdb": {
       // NPM package to use as a connector
       "type": "@ldes/ldes-graphdb-connector",
       // Connector specific settings cf. Connectors
@@ -106,11 +107,12 @@ The LDES Replicator is a CLI that takes a JSON file for configuration.
 }
 ```
 
-Once the config file is created you can start the LDES replicator with `npm run start -- <config_path>`
+Once the config file is created you can add the dynamic dependencies with `npm run start -- -s <config_path>`
+and once it's done, start the LDES replicator with `npm run start -- <config_path>`
 
 ## Running it with Docker
 
-The LDES Replicator is available as a docker image: `ghcr.io/osoc21/ldes-replicator:helm-chart`
+The LDES Replicator is available as a docker image: `ghcr.io/osoc21/ldes-replicator`
 
 ### Requirements
 
@@ -121,17 +123,25 @@ A redis server and a backend server of your choice are needed for the LDES repli
 ```shell
 docker run \
   -e URLS=ldes.example \
-  -e STATE_CONFIG={"host":"127.0.0.1", "id":"replicator"} \
+  -e 'STATE_CONFIG={"host":"127.0.0.1", "id":"replicator"}' \
   -e CONNECTORS=[0] \
   -e CONNECTOR_0_TYPE=ldes-backend-connector \
-  -e CONNECTOR_0_CONFIG={...} \
+  -e 'CONNECTOR_0_CONFIG={...}' \
+  ghcr.io/osoc21/ldes-replicator:latest
+```
+
+or, if a config file is available:
+
+```shell
+docker run \
+  -v $(pwd)/config.json:./config.json
   ghcr.io/osoc21/ldes-replicator:latest
 ```
 
 ### Environment Variables
 
-Environment used to automatically create a [Config file](#config-file), otherwise those can be ignored
-and a config file mounted at `./config.json`.
+Environment variables can be used to automatically create a [Config file](#config-file),
+otherwise those can be ignored and a config file mounted at `./config.json`.
 
 - `URLS`: comma-separated list of LDES URLs.
 - `STATE_CONFIG`: JSON object with the Redis connection settings.
@@ -157,8 +167,7 @@ and a config file mounted at `./config.json`.
 
 ### Generic settings
 
-The connectors will try to implement generic settings to allow a more customizable replication
-(ex. keep X versions, store X field as geospatial...):
+The connectors will try to implement generic settings to allow a more customizable replication:
 
 ```js
 CONFIG:
@@ -228,7 +237,7 @@ CONFIG:
 }
 ```
 
-_Note: The version-materialization connector requires the versions setting (specificaly the identifier field)._
+_Note: The version-materialization connector requires the versions setting (specifically the identifier field)._
 
 ### Docker-compose
 

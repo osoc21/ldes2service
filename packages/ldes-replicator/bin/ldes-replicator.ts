@@ -103,7 +103,8 @@ async function fetchShape({ ldesURI, shapeURI }: Record<string, any>): Promise<L
 }
 
 class LdesReplicator extends Command {
-  public static description = 'describe the command here';
+  public static description =
+    'Allows you to replicate any amount of LDES into different backends via connectors.';
 
   public static flags = {
     version: flags.version({ char: 'v' }),

@@ -40,12 +40,12 @@ export class MongoDbConnector implements IWritableConnector {
 
     const versionId = MongoDbConnector.extractAndSlug(this.config.versions.identifier);
     const sorterSlug = MongoDbConnector.extractAndSlug(this.config.versions.sorter);
-    const version = this.getField(member[this.config.versions.identifier]);
+    const element = this.getField(member[this.config.versions.identifier]);
 
     const collection = this.db.collection('ldes');
 
     const results = await collection
-      .find(Object.fromEntries([[versionId, version]]))
+      .find(Object.fromEntries([[versionId, element]]))
       .sort(sorterSlug, 1)
       .toArray();
 

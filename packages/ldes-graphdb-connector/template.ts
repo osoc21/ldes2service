@@ -6,23 +6,26 @@ export const template: IConfigTemplate = {
   fields: [
     {
       name: 'username',
-      validation: ['required', 'string'],
-      value: 'default value',
+      validation: ['string'],
     },
     {
       name: 'password',
-      validation: ['required', 'string'],
-      value: 'default value',
+      validation: ['string'],
     },
     {
       name: 'repository',
       validation: ['required', 'string'],
-      value: 'default value',
+      value: 'Test',
     },
     {
       name: 'baseUrl',
       validation: ['required', 'string'],
-      value: 'default value',
+      value: 'http://localhost:7200',
+    },
+    {
+      name: 'graphPrefix',
+      validation: ['required', 'string'],
+      value: 'http://localhost/graph/',
     },
   ],
   composeTemplate: ``,
