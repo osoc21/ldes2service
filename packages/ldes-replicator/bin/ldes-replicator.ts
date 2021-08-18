@@ -23,10 +23,10 @@ interface IReplicatorConfig {
   replicator: {
     ldes: {
       url: string;
-      shape?: string;
       shapeUrl?: string;
     }[];
     state: IRedisStateConfig;
+    disable_pulling: boolean;
     polling_interval: number;
   };
   connectors: ConnectorConfigs;
@@ -137,6 +137,7 @@ class LdesReplicator extends Command {
 
     const options = {
       pollingInterval: config.replicator.polling_interval,
+      disablePolling: config.replicator.disable_pulling,
     };
 
     const streams: LdesObjects = Object.fromEntries(
