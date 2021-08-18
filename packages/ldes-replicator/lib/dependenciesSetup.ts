@@ -5,6 +5,7 @@ const LDES_CONNECTORS = new Set([
   '@ldes/ldes-postgres-connector',
   '@ldes/ldes-mongodb-connector',
   '@ldes/ldes-graphdb-connector',
+  '@ldes/ldes-graphdb-version-materialization-connector',
 ]);
 
 export async function dependenciesSetup(config: any): Promise<void> {

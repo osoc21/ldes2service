@@ -1,4 +1,3 @@
-import * as EventEmitter from 'events';
 import type { IConfigConnector, IWritableConnector, LdesShape } from '@ldes/types';
 import { JsonLdParser } from 'jsonld-streaming-parser';
 import { DataFactory } from 'rdf-data-factory';
@@ -33,10 +32,9 @@ const defaultConfig: IConfigGraphDbConnector = {
   repository: 'Test',
 };
 
-export class GraphDbConnector extends EventEmitter implements IWritableConnector {
+export class GraphDbConnector implements IWritableConnector {
   private readonly config: IConfigGraphDbConnector;
   private readonly shape?: LdesShape;
-  private readonly members: any[];
   private queue = [];
   private versionConstraintTimeout: NodeJS.Timer;
   private flushTimeout: NodeJS.Timer;
@@ -46,12 +44,10 @@ export class GraphDbConnector extends EventEmitter implements IWritableConnector
   private versionConstraintInProgress = false;
 
   public constructor(config: IConfigConnector, shape: LdesShape, id: string) {
-    super();
     this.config = { ...defaultConfig, ...config };
     this.id = id;
     this.shape = shape;
     this.graph = this.config.graphPrefix + this.id;
-    this.setMaxListeners(1_000);
   }
 
   private async flush(): Promise<void> {
@@ -84,13 +80,10 @@ export class GraphDbConnector extends EventEmitter implements IWritableConnector
     const stringQuery = generator.stringify(query);
 
     await this.endpoint.update(stringQuery);
-
-    this.emit('flush', true);
   }
 
   public async addToQueue(quads: any): Promise<void> {
     this.queue = this.queue.concat(quads);
-    return await new Promise(resolve => this.once('flush', val => resolve(val)));
   }
 
   private async _removeExcedentVersions(element: string): Promise<void> {

@@ -30,6 +30,9 @@ A connector implementation for MongoDB.
 **ldes-graphdb-connector:**<br />
 A connector implementation for GraphDB. (can be easily extended to any other datastore compatible with SPARQL)
 
+**ldes-graphdb-version-materialization-connector:**<br />
+Based on the GraphDB connector, for the specific case we only want to keep the last version.
+
 **ldes-dummy-state:**<br />
 An example to write your own state.
 
@@ -86,6 +89,7 @@ The LDES Replicator is a CLI that takes a JSON file for configuration.
       "port": "port number",
       "password": "password, if needed"
     },
+    "disable_polling": "If the replicator should stop after the last page of the ldes has been reached",
     "polling_interval": "delay in ms"
   },
   // Connector settings
@@ -163,7 +167,7 @@ CONFIG:
   versions: {
     // Amount of versions to keep
     amount: number,
-    // Field of the LDES that identifies versions of the same object
+    // Field of the LDES that identifies versions of the same element
     identifier: string,
     // Field of the LDES used to sort the versions (and get rid of the older ones)
     sorter: string,
@@ -206,7 +210,7 @@ CONFIG:
 }
 ```
 
-### @ldes/ldes-graphdb-connector
+### @ldes/ldes-graphdb-connector and @ldes/ldes-graphdb-version-materialization-connector
 
 Stores the Linked Data Events inside a GraphDB backend.
 
@@ -223,6 +227,8 @@ CONFIG:
   "graphPrefix": string
 }
 ```
+
+_Note: The version-materialization connector requires the versions setting (specificaly the identifier field)._
 
 ### Docker-compose
 
