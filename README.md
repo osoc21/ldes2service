@@ -234,6 +234,8 @@ CONFIG:
   "repository": number,
   //Each ldes is stored in a different graph, with this you can provide their URI prefix
   "graphPrefix": string
+  // Field of the LDES to use as a label, this will create a Lucine connector for full-text search
+  "luceneLabel": string
 }
 ```
 

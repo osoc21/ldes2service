@@ -22,6 +22,7 @@ export interface IConfigGraphDbConnector extends IConfigConnector {
   baseUrl: string;
   repository: string;
   graphPrefix: string;
+  luceneLabel?: string;
   username?: string;
   password?: string;
 }
@@ -42,12 +43,14 @@ export class GraphDbConnector implements IWritableConnector {
   private readonly id: string;
   private readonly graph: string;
   private versionConstraintInProgress = false;
+  private luceneIndex: boolean;
 
   public constructor(config: IConfigConnector, shape: LdesShape, id: string) {
     this.config = { ...defaultConfig, ...config };
     this.id = id;
     this.shape = shape;
     this.graph = this.config.graphPrefix + this.id;
+    this.luceneIndex = !this.config.luceneLabel;
   }
 
   private async flush(): Promise<void> {
@@ -156,6 +159,12 @@ export class GraphDbConnector implements IWritableConnector {
    * @param member
    */
   public async writeVersion(member: any): Promise<void> {
+    const JSONmember = JSON.parse(member);
+    if (!this.luceneIndex && JSONmember['@type']) {
+      this.luceneIndex = true;
+      this.createLucineIndex(JSONmember['@type']).catch(console.error);
+    }
+
     const chunks: any[] = [];
     const parser = new JsonLdParser();
     parser
@@ -181,6 +190,10 @@ export class GraphDbConnector implements IWritableConnector {
       await this.endpoint.login(this.config.username, this.config.username);
     }
 
+    if (!this.luceneIndex) {
+      await this.lucineIndexExists();
+    }
+
     this.flushTimeout = setInterval(con => con.flush(), 3_000, this);
     this.versionConstraintTimeout = setInterval(con => con.versionConstraint(), 4_000, this);
   }
@@ -192,5 +205,51 @@ export class GraphDbConnector implements IWritableConnector {
     clearInterval(this.flushTimeout);
     clearInterval(this.versionConstraintTimeout);
     this.endpoint.disconnect();
+  }
+
+  private async lucineIndexExists(): Promise<boolean> {
+    const request = await this.endpoint.query(`
+      SELECT ?s {?s <http://www.ontotext.com/connectors/lucene#listConnectors> "${this.id}_index"} 
+    `);
+
+    this.luceneIndex = request.results.bindings.length > 0;
+
+    return this.luceneIndex;
+  }
+
+  private async createLucineIndex(typeUri: string): Promise<void> {
+    if (!this.config.luceneLabel) {
+      return;
+    }
+    console.log('CREATING INDEX');
+    const definition = {
+      fields: [
+        {
+          fieldName: 'label',
+          propertyChain: this.config.luceneLabel.split(','),
+          indexed: true,
+          stored: true,
+          analyzed: true,
+          multivalued: true,
+          ignoreInvalidValues: false,
+          facet: true,
+        },
+      ],
+      languages: [],
+      types: [typeUri],
+      readonly: false,
+      detectFields: false,
+      importGraph: false,
+      skipInitialIndexing: false,
+      boostProperties: [],
+      stripMarkup: false,
+    };
+
+    await this.endpoint.update(`INSERT DATA {
+      <http://www.ontotext.com/connectors/lucene/instance#${this.id}_index>
+      <http://www.ontotext.com/connectors/lucene#createConnector>
+      '''${JSON.stringify(definition, null, 2)}''' .
+      }
+    `);
   }
 }

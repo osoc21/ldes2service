@@ -22,6 +22,7 @@ export interface IConfigGraphDbConnector extends IConfigConnector {
   baseUrl: string;
   repository: string;
   graphPrefix: string;
+  luceneLabel?: string;
   username?: string;
   password?: string;
 }
@@ -40,7 +41,7 @@ export class GraphDbVersionMaterializationConnector implements IWritableConnecto
   private endpoint: any;
   private readonly id: string;
   private readonly graph: string;
-  private readonly versionConstraintInProgress = false;
+  private luceneIndex: boolean;
 
   public constructor(config: IConfigConnector, shape: LdesShape, id: string) {
     if (!config.versions || !config.versions.identifier) {
@@ -51,6 +52,7 @@ export class GraphDbVersionMaterializationConnector implements IWritableConnecto
     this.id = id;
     this.shape = shape;
     this.graph = this.config.graphPrefix + this.id;
+    this.luceneIndex = !this.config.luceneLabel;
   }
 
   private async flush(): Promise<void> {
@@ -145,6 +147,12 @@ export class GraphDbVersionMaterializationConnector implements IWritableConnecto
    * @param member
    */
   public async writeVersion(member: any): Promise<void> {
+    const JSONmember = JSON.parse(member);
+    if (!this.luceneIndex && JSONmember['@type']) {
+      this.luceneIndex = true;
+      this.createLucineIndex(JSONmember['@type']).catch(console.error);
+    }
+
     const chunks: any[] = [];
     const parser = new JsonLdParser();
     parser
@@ -160,7 +168,7 @@ export class GraphDbVersionMaterializationConnector implements IWritableConnecto
    * Initializes the backend system by creating tables, counters and/or enabling plugins
    */
   public async provision(): Promise<void> {
-    if (!this.fieldInShape(this.config.versions?.identifier)) {
+    if (!this.shape.some(fl => fl.path === this.config.versions?.identifier)) {
       throw new Error("The versioning fields couldn't be found in the SHACL shape");
     }
 
@@ -174,6 +182,10 @@ export class GraphDbVersionMaterializationConnector implements IWritableConnecto
       await this.endpoint.login(this.config.username, this.config.username);
     }
 
+    if (!this.luceneIndex) {
+      await this.lucineIndexExists();
+    }
+
     this.flushTimeout = setInterval(con => con.flush(), 1_000, this);
   }
 
@@ -185,7 +197,49 @@ export class GraphDbVersionMaterializationConnector implements IWritableConnecto
     this.endpoint.disconnect();
   }
 
-  public fieldInShape(field: string | undefined): boolean {
-    return this.shape.some(f => f.path === field);
+  private async lucineIndexExists(): Promise<boolean> {
+    const request = await this.endpoint.query(`
+      SELECT ?s {?s <http://www.ontotext.com/connectors/lucene#listConnectors> "${this.id}_index"} 
+    `);
+
+    this.luceneIndex = request.results.bindings.length > 0;
+
+    return this.luceneIndex;
+  }
+
+  private async createLucineIndex(typeUri: string): Promise<void> {
+    if (!this.config.luceneLabel) {
+      return;
+    }
+    console.log('CREATING INDEX');
+    const definition = {
+      fields: [
+        {
+          fieldName: 'label',
+          propertyChain: this.config.luceneLabel.split(','),
+          indexed: true,
+          stored: true,
+          analyzed: true,
+          multivalued: true,
+          ignoreInvalidValues: false,
+          facet: true,
+        },
+      ],
+      languages: [],
+      types: [typeUri],
+      readonly: false,
+      detectFields: false,
+      importGraph: false,
+      skipInitialIndexing: false,
+      boostProperties: [],
+      stripMarkup: false,
+    };
+
+    await this.endpoint.update(`INSERT DATA {
+      <http://www.ontotext.com/connectors/lucene/instance#${this.id}_index>
+      <http://www.ontotext.com/connectors/lucene#createConnector>
+      '''${JSON.stringify(definition, null, 2)}''' .
+      }
+    `);
   }
 }
