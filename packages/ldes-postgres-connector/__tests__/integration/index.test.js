@@ -5,7 +5,11 @@ describe('ldes-postgres-connector', () => {
 
   beforeEach(async () => {
     connector = new PostgresConnector({
-      amountOfVersions: 2,
+      versions: {
+        sorter: "http://www.w3.org/ns/prov#generatedAtTime",
+        amount: 2,
+        identifier: "http://purl.org/dc/terms/isVersionOf",
+      },
       username: 'postgres',
       password: 'postgres',
       database: 'postgres',
@@ -68,7 +72,6 @@ describe('ldes-postgres-connector', () => {
     );
   });
 
-  /* HAS TO BE IMPLEMENTED BACK WITH THE GENERIC APPROACH
   it('should only store the latest 2 versions', async () => {
     const member1 = JSON.stringify({
       '@id': '1_1',
@@ -115,5 +118,4 @@ describe('ldes-postgres-connector', () => {
       ])
     );
   });
-   */
 });

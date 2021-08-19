@@ -13,6 +13,7 @@
       "id": "replicator",
       "host": "localhost"
     },
+    "disable_pulling": true,
     "polling_interval": 5000
   },
   "connectors": {

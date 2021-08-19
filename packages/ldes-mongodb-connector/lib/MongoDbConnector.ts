@@ -13,7 +13,6 @@ export interface IConfigMongoDbConnector extends IConfigConnector {
   extraParameters?: string;
 }
 const defaultConfig: IConfigMongoDbConnector = {
-  amountOfVersions: 0,
   hostname: 'localhost',
   database: 'admin',
   port: 27_017,
@@ -34,6 +33,31 @@ export class MongoDbConnector implements IWritableConnector {
     this.shape = shape;
   }
 
+  private async versioning(member: any): Promise<void> {
+    if (!this.config.versions) {
+      return;
+    }
+
+    const versionId = MongoDbConnector.extractAndSlug(this.config.versions.identifier);
+    const sorterSlug = MongoDbConnector.extractAndSlug(this.config.versions.sorter);
+    const element = this.getField(member[this.config.versions.identifier]);
+
+    const collection = this.db.collection('ldes');
+
+    const results = await collection
+      .find(Object.fromEntries([[versionId, element]]))
+      .sort(sorterSlug, 1)
+      .toArray();
+
+    const numberToDelete = results.length - this.config.versions.amount;
+
+    if (numberToDelete > 0) {
+      const idsToRemove = results.slice(0, numberToDelete).map((value: any) => value._id);
+
+      await collection.deleteMany({ _id: { $in: idsToRemove } });
+    }
+  }
+
   /**
    * Writes a version to the corresponding backend system
    * @param member
@@ -52,6 +76,10 @@ export class MongoDbConnector implements IWritableConnector {
 
     const collection = this.db.collection(this.id);
     await collection.insertOne(data);
+
+    if (this.config.versions) {
+      await this.versioning(JSONmember);
+    }
   }
 
   /**

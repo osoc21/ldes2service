@@ -1,3 +1,7 @@
 export interface IConfigConnector {
-  amountOfVersions: number;
+  versions?: {
+    amount: number;
+    identifier: string;
+    sorter: string;
+  };
 }

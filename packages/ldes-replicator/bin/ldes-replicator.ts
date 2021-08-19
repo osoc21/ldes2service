@@ -23,10 +23,10 @@ interface IReplicatorConfig {
   replicator: {
     ldes: {
       url: string;
-      shape?: string;
       shapeUrl?: string;
     }[];
     state: IRedisStateConfig;
+    disable_pulling: boolean;
     polling_interval: number;
   };
   connectors: ConnectorConfigs;
@@ -103,7 +103,8 @@ async function fetchShape({ ldesURI, shapeURI }: Record<string, any>): Promise<L
 }
 
 class LdesReplicator extends Command {
-  public static description = 'describe the command here';
+  public static description =
+    'Allows you to replicate any amount of LDES into different backends via connectors.';
 
   public static flags = {
     version: flags.version({ char: 'v' }),
@@ -137,6 +138,7 @@ class LdesReplicator extends Command {
 
     const options = {
       pollingInterval: config.replicator.polling_interval,
+      disablePolling: config.replicator.disable_pulling,
     };
 
     const streams: LdesObjects = Object.fromEntries(

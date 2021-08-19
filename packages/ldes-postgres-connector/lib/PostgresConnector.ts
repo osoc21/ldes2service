@@ -12,7 +12,6 @@ export interface IConfigPostgresConnector extends IConfigConnector {
 }
 
 const defaultConfig: IConfigPostgresConnector = {
-  amountOfVersions: 0,
   username: 'postgres',
   hostname: 'localhost',
   database: 'postgres',
@@ -51,6 +50,29 @@ export class PostgresConnector implements IWritableConnector {
     this.id = id;
   }
 
+  private async versioning(member: any): Promise<void> {
+    if (!this.config.versions) {
+      return;
+    }
+
+    const versionId = PostgresConnector.extractAndSlug(this.config.versions.identifier);
+    const sorterSlug = PostgresConnector.extractAndSlug(this.config.versions.sorter);
+    const element = this.getField(member[this.config.versions.identifier]);
+
+    const { rows: results } = await this.poolClient.query(
+      `SELECT * FROM "${this.id}" WHERE ${versionId} = $1 ORDER BY ${sorterSlug} ASC`,
+      [element]
+    );
+
+    const numberToDelete = results.length - this.config.versions.amount;
+
+    if (numberToDelete > 0) {
+      const idsToRemove = results.slice(0, numberToDelete).map((value: any) => `'${value.id}'`);
+
+      await this.pool.query(`DELETE FROM "${this.id}" WHERE id IN (${idsToRemove.join(', ')})`);
+    }
+  }
+
   /**
    * Writes a version to the corresponding backend system
    * @param member
@@ -79,6 +101,10 @@ export class PostgresConnector implements IWritableConnector {
     values.push(member);
 
     await this.poolClient.query(query, values);
+
+    if (this.config.versions) {
+      await this.versioning(JSONmember);
+    }
   }
 
   /**
@@ -132,16 +158,12 @@ export class PostgresConnector implements IWritableConnector {
     return this.pool.end();
   }
 
-  private getField(property: any, datatype: PostgresDataType): Date | string | null {
+  private getField(property: any): string | null {
     const value: string | undefined = property?.['@value'] ?? property?.['@id'] ?? property;
 
     if (value === undefined || value === null) {
       return null;
     }
-
-    // If(datatype === PostgresDataType.TIMESTAMP){
-    //   return new Date(value)
-    // }
 
     return value;
   }

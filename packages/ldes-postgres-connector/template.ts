@@ -7,6 +7,7 @@ export const template: IConfigTemplate = {
     {
       name: 'hostname',
       validation: ['required', 'string'],
+      value: 'localhost',
     },
     {
       name: 'port',
@@ -27,11 +28,6 @@ export const template: IConfigTemplate = {
       name: 'database',
       validation: ['required', 'string'],
       value: 'postgres',
-    },
-    {
-      name: 'tableName',
-      validation: ['required', 'string'],
-      value: 'ldes',
     },
   ],
   composeTemplate: `
