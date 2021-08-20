@@ -7,7 +7,6 @@ import type { IRedisStateConfig } from '@ldes/ldes-redis-state';
 import { RedisState } from '@ldes/ldes-redis-state';
 import type { ConnectorConfigs, LdesObjects, LdesShape } from '@ldes/types';
 import { Command, flags } from '@oclif/command';
-import { newEngine } from '@treecg/actor-init-ldes-client';
 import type { Quad } from 'n3';
 import { DataFactory, Store } from 'n3';
 import rdfDereferencer from 'rdf-dereference';
@@ -133,7 +132,10 @@ class LdesReplicator extends Command {
       return await dependenciesSetup(config);
     }
 
-    const state = new RedisState(config.replicator.state);
+    const state = {
+      class: RedisState,
+      settings: config.replicator.state,
+    };
 
     const options = {
       pollingInterval: config.replicator.polling_interval,
@@ -144,7 +146,6 @@ class LdesReplicator extends Command {
         config.replicator.ldes.map(async ldes => [
           ldes.url,
           {
-            stream: newEngine().createReadStream(ldes.url, options),
             url: ldes.url,
             name: slugify(ldes.url, { remove: /[!"'()*+./:@~]/gu }),
             shape: await fetchShape({ shapeURI: ldes.shapeUrl, ldesURI: ldes.url }),
@@ -153,7 +154,7 @@ class LdesReplicator extends Command {
       )
     );
 
-    const orchestrator = new Orchestrator(state, streams, config.connectors);
+    const orchestrator = new Orchestrator(state, streams, config.connectors, options);
     await orchestrator.provision();
     await orchestrator.run();
   }

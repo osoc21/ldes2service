@@ -1,4 +1,8 @@
-import type { Url } from 'url';
+import type { URL } from 'url';
+
+export interface IStateConfig {
+  id: string;
+}
 
 export interface IState {
   /**
@@ -9,15 +13,20 @@ export interface IState {
   /**
    * Mark this page as the latest one that was processed
    */
-  setLatestPage: (page: Url) => Promise<void>;
+  setLatestPage: (page: URL) => Promise<void>;
 
   /**
    * Return the latest processed page
    */
-  getLatestPage: () => Promise<Url | null>;
+  getLatestPage: () => Promise<URL | null>;
 
   /**
    * Return all processed pages
    */
-  getProcessedPages: () => Promise<Url[]>;
+  getProcessedPages: () => Promise<URL[]>;
+
+  /**
+   * Resets the state, effectively deleting all the pages
+   */
+  reset: () => Promise<void>;
 }

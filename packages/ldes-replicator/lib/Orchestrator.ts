@@ -1,3 +1,4 @@
+import { URL } from 'url';
 import type {
   IState,
   IWritableConnector,
@@ -5,21 +6,36 @@ import type {
   LdesObject,
   LdesObjects,
   ConnectorConfigs,
+  IStateConfig,
 } from '@ldes/types';
+import { newEngine } from '@treecg/actor-init-ldes-client';
+import type { IEventStreamArgs } from '@treecg/actor-init-ldes-client/lib/EventStream';
+
+interface IStateDefinition {
+  class: any;
+  settings: IStateConfig;
+}
 
 /**
  * An Orchestrator will handle the synchronization of the Linked Data Event Stream.
  */
 export class Orchestrator {
-  private readonly stateStore: IState;
+  private readonly stateDefinition: IStateDefinition;
   private readonly ldesObjects: LdesObjects;
   private readonly ldesConnectors: Map<LdesObject, IWritableConnector[]> = new Map();
   private readonly connectorsConfig: ConnectorConfigs;
+  private readonly streamOptions: IEventStreamArgs;
 
-  public constructor(stateStore: IState, ldesObjects: LdesObjects, connectorsConfig: ConnectorConfigs) {
-    this.stateStore = stateStore;
+  public constructor(
+    stateDefinition: IStateDefinition,
+    ldesObjects: LdesObjects,
+    connectorsConfig: ConnectorConfigs,
+    streamOptions: IEventStreamArgs
+  ) {
+    this.stateDefinition = stateDefinition;
     this.ldesObjects = ldesObjects;
     this.connectorsConfig = connectorsConfig;
+    this.streamOptions = streamOptions;
   }
 
   /**
@@ -37,6 +53,7 @@ export class Orchestrator {
 
       return new Promise<void>((resolve, reject) => {
         ldesObject.stream
+          .on('metadata', data => this.processMetadata(ldesObject, data.url))
           .on('readable', async () => {
             await this.processData(ldesObject, connectors);
           })
@@ -46,12 +63,39 @@ export class Orchestrator {
       });
     });
 
-    return Promise.all(runs);
+    return await Promise.all(runs);
+  }
+
+  private async processMetadata(ldesObject: LdesObject, url: string): Promise<void> {
+    await ldesObject.state.setLatestPage(new URL(url));
+  }
+
+  private async createStreams(): Promise<void> {
+    const promises = Object.values(this.ldesObjects).map(async ldesObject => {
+      const id = `${this.stateDefinition.settings.id}_${ldesObject.url}`;
+      const state: IState = new this.stateDefinition.class({ ...this.stateDefinition.settings, id });
+
+      await state.provision();
+
+      const latestPage = (await state.getLatestPage())?.href ?? ldesObject.url;
+      const processedPages = (await state.getProcessedPages()).map(url => url.href);
+
+      console.log(latestPage, processedPages);
+
+      const stream = newEngine().createReadStream(latestPage, this.streamOptions);
+
+      stream.ignorePages(processedPages);
+
+      this.ldesObjects[ldesObject.url].state = state;
+      this.ldesObjects[ldesObject.url].stream = stream;
+    });
+
+    await Promise.all(promises);
   }
 
   public async provision(): Promise<void> {
     const promises: Promise<void>[] = [];
-    const state = this.stateStore.provision();
+    await this.createStreams();
 
     Object.values(this.ldesObjects).forEach(ldesObject => {
       const ldesConnectors: IWritableConnector[] = Object.values(this.connectorsConfig).map(
@@ -76,7 +120,7 @@ export class Orchestrator {
       this.ldesConnectors.set(ldesObject, ldesConnectors);
     });
 
-    await Promise.all([state, ...promises]);
+    await Promise.all(promises);
 
     console.debug('END PROVISION');
   }
@@ -84,8 +128,10 @@ export class Orchestrator {
   /**
    * Reset the state
    */
-  public reset(): Promise<void> {
-    throw new Error('not implemented');
+  public async reset(): Promise<void> {
+    const promises = Object.values(this.ldesObjects).map(obj => obj.state.reset());
+
+    await Promise.all(promises);
   }
 
   protected async processData(ldesObject: LdesObject, connectors: IWritableConnector[]): Promise<void> {
